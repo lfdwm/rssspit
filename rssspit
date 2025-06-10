@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Resolve the real path of the script, following symlinks
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+
+# Change to the resolved directory
+cd "$SCRIPT_DIR" || exit 1
+
+poetry run python rssspit.py "$@"
